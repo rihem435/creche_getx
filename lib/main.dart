@@ -1,4 +1,5 @@
 import 'package:app/screen/login_screen.dart';
+import 'package:app/screen/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 var text = const Text(
@@ -26,7 +27,7 @@ var afficheIconVi = IconButton(
 );
 void main() {
   runApp(
-     MaterialApp(
+    MaterialApp(
       home: LoginScreen(),
     ),
   );
