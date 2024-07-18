@@ -1,21 +1,31 @@
 import 'package:app/core/networking/app_url.dart';
 import 'package:app/core/widgets/custom_input_text.dart';
+import 'package:app/models/user_login_model.dart';
+import 'package:app/screen/home_screen.dart';
 import 'package:app/screen/sign_up_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final keyForm = GlobalKey<FormState>();
 
   TextEditingController userNameController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
-  
+
   final dio = Dio();
-  
-  login() async {
+
+  UserLoginModel? userLoginModel;
+
+  login(BuildContext context) async {
     try {
       Response response = await dio.post(
         AppUrl.loginUrl,
@@ -26,10 +36,26 @@ class LoginScreen extends StatelessWidget {
       );
       if (response.statusCode == 200) {
         print("login success------------------------");
+
+        userLoginModel = UserLoginModel.fromJson(response.data);
+
+        print("username================>${userLoginModel!.firstName}");
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
       }
     } catch (error) {
       print('error==================>$error');
     }
+  }
+
+  bool obscureText = true;
+  void showPassword() {
+    obscureText = !obscureText;
+    print("obscureText ==========>$obscureText");
   }
 
   @override
@@ -88,18 +114,22 @@ class LoginScreen extends StatelessWidget {
                   controller: passwordController,
                   hintText: "tapez votre password",
                   icon: Icons.lock,
-                  obscureText: true,
+                  obscureText: obscureText,
                   suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.visibility,
-                      color: Colors.blue,
-                    ),
+                    onPressed: () {
+                      setState(() {
+                        showPassword();
+                      });
+                    },
+                    
+                    icon: obscureText ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                    
+                     
                   ),
                   text: "Password",
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return " username is required";
+                      return " password is required";
                     } else if (value.length < 6) {
                       return " password not valid ";
                     }
@@ -118,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                           fontSize: 24, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     if (keyForm.currentState!.validate()) {
-                      login();
+                      login(context);
                       print('valide ');
                       print('username==================>$userNameController');
                       print(

@@ -1,6 +1,8 @@
+import 'package:app/screen/home_screen.dart';
 import 'package:app/screen/login_screen.dart';
 import 'package:app/screen/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 var text = const Text(
   "Bonjour ",
@@ -25,9 +27,10 @@ var afficheIconVi = IconButton(
     size: 35,
   ),
 );
-void main() {
+Future<void> main() async {
+  await GetStorage.init();
   runApp(
-    MaterialApp(
+    const MaterialApp(
       home: LoginScreen(),
     ),
   );
