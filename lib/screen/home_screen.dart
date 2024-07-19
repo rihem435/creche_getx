@@ -1,3 +1,4 @@
+import 'package:app/core/storage/app_storage.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,18 +22,24 @@ class HomeScreen extends StatelessWidget {
             UserAccountsDrawerHeader(
               // <-- SEE HERE
               decoration: const BoxDecoration(color: Colors.grey),
-              accountName: const Text(
-                "Pinkesh Darji",
-                style: TextStyle(
+
+              
+              accountName: Text(
+                "${AppStorage.readName()}",
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              accountEmail: const Text(
-                "pinkesh.earth@gmail.com",
-                style: TextStyle(
+
+              accountEmail: Text(
+                "${AppStorage.readEmail()}",
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
+
+
               currentAccountPicture: Image.asset(
                 "assets/images/parent.png",
               ),

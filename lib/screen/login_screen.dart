@@ -1,4 +1,5 @@
 import 'package:app/core/networking/app_url.dart';
+import 'package:app/core/storage/app_storage.dart';
 import 'package:app/core/widgets/custom_input_text.dart';
 import 'package:app/models/user_login_model.dart';
 import 'package:app/screen/home_screen.dart';
@@ -40,6 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
         userLoginModel = UserLoginModel.fromJson(response.data);
 
         print("username================>${userLoginModel!.firstName}");
+
+        AppStorage.saveName(
+            "${userLoginModel!.firstName}${userLoginModel!.lastName}");
+
+        AppStorage.saveEmail("${userLoginModel!.email}");
+
+        
 
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -121,10 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         showPassword();
                       });
                     },
-                    
-                    icon: obscureText ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                    
-                     
+                    icon: obscureText
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
                   ),
                   text: "Password",
                   validator: (value) {
