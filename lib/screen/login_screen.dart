@@ -8,6 +8,7 @@ import 'package:app/screen/sign_up_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 class LoginScreen extends GetView<ProfileController> {
@@ -65,30 +66,33 @@ class LoginScreen extends GetView<ProfileController> {
                 const SizedBox(
                   height: 15,
                 ),
-                CustomInputText(
-                  controller: controller.passwordController,
-                  hintText: "tapez votre password",
-                  icon: Icons.lock,
-                  obscureText: controller.obscureText,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      // setState(() {
-                      //   showPassword();
-                      // });
+                GetBuilder<ProfileController>(
+                  builder: (controller) => CustomInputText(
+                    controller: controller.passwordController,
+                    hintText: "tapez votre password",
+                    icon: Icons.lock,
+                    obscureText: controller.obscureText,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        controller.showPassword();
+                        // setState(() {
+                        //   showPassword();
+                        // });
+                      },
+                      icon: controller.obscureText
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
+                    ),
+                    text: "Password",
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return " password is required";
+                      } else if (value.length < 6) {
+                        return " password not valid ";
+                      }
+                      return null;
                     },
-                    icon: controller.obscureText
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
                   ),
-                  text: "Password",
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return " password is required";
-                    } else if (value.length < 6) {
-                      return " password not valid ";
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(
                   height: 35,
@@ -102,7 +106,8 @@ class LoginScreen extends GetView<ProfileController> {
                           fontSize: 24, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     if (controller.keyForm.currentState!.validate()) {
-                      controller.login(context);
+                      // controller.login(context);
+                      Get.to(const HomeScreen());
                       print('valide ');
                     }
                   },

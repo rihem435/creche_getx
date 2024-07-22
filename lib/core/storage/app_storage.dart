@@ -2,8 +2,18 @@ import 'package:app/core/storage/storage.dart';
 
 class AppStorage {
   static String keyName = "lastName";
-  
+
   static String keyEmail = "email";
+  static String keyId = "id";
+
+  static saveId(String id) {
+    SecureStorage.writeSecureData(key: keyId, value: id);
+  }
+
+  static String? readId() {
+    String? name = SecureStorage.readSecureData(keyId);
+    return name;
+  }
 
   static saveName(String name) {
     SecureStorage.writeSecureData(key: keyName, value: name);

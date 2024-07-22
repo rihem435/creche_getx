@@ -31,11 +31,11 @@ var afficheIconVi = IconButton(
 );
 Future<void> main() async {
   await GetStorage.init();
-  
+
   runApp(
     GetMaterialApp(
       initialBinding: AllBindings(),
-      home: const LoginScreen(),
+      home: const HomeScreen(),
     ),
   );
 }

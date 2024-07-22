@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 import 'package:dio/dio.dart' as di;
+
 class ProfileController extends GetxController {
   final keyForm = GlobalKey<FormState>();
 
@@ -34,7 +35,7 @@ class ProfileController extends GetxController {
         userLoginModel = UserLoginModel.fromJson(response.data);
 
         print("username================>${userLoginModel!.firstName}");
-
+        AppStorage.saveId("${userLoginModel!.id}");
         AppStorage.saveName(
             "${userLoginModel!.firstName}${userLoginModel!.lastName}");
 
@@ -57,5 +58,7 @@ class ProfileController extends GetxController {
   void showPassword() {
     obscureText = !obscureText;
     print("obscureText ==========>$obscureText");
+
+    update();
   }
 }
