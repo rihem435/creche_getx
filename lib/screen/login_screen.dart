@@ -1,3 +1,4 @@
+import 'package:app/controllers/profile_controller.dart';
 import 'package:app/core/networking/app_url.dart';
 import 'package:app/core/storage/app_storage.dart';
 import 'package:app/core/widgets/custom_input_text.dart';
@@ -7,64 +8,10 @@ import 'package:app/screen/sign_up_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends GetView<ProfileController> {
   const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final keyForm = GlobalKey<FormState>();
-
-  TextEditingController userNameController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
-
-  final dio = Dio();
-
-  UserLoginModel? userLoginModel;
-
-  login(BuildContext context) async {
-    try {
-      Response response = await dio.post(
-        AppUrl.loginUrl,
-        data: {
-          "username": userNameController.text,
-          "password": passwordController.text,
-        },
-      );
-      if (response.statusCode == 200) {
-        print("login success------------------------");
-
-        userLoginModel = UserLoginModel.fromJson(response.data);
-
-        print("username================>${userLoginModel!.firstName}");
-
-        AppStorage.saveName(
-            "${userLoginModel!.firstName}${userLoginModel!.lastName}");
-
-        AppStorage.saveEmail("${userLoginModel!.email}");
-
-        
-
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
-      }
-    } catch (error) {
-      print('error==================>$error');
-    }
-  }
-
-  bool obscureText = true;
-  void showPassword() {
-    obscureText = !obscureText;
-    print("obscureText ==========>$obscureText");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            key: keyForm,
+            key: controller.keyForm,
             child: Column(
               children: [
                 const SizedBox(
@@ -96,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 200,
                 ),
                 TextFormField(
-                  controller: userNameController,
+                  controller: controller.userNameController,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "username is required";
@@ -119,17 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 15,
                 ),
                 CustomInputText(
-                  controller: passwordController,
+                  controller: controller.passwordController,
                   hintText: "tapez votre password",
                   icon: Icons.lock,
-                  obscureText: obscureText,
+                  obscureText: controller.obscureText,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      setState(() {
-                        showPassword();
-                      });
+                      // setState(() {
+                      //   showPassword();
+                      // });
                     },
-                    icon: obscureText
+                    icon: controller.obscureText
                         ? const Icon(Icons.visibility)
                         : const Icon(Icons.visibility_off),
                   ),
@@ -154,12 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       textStyle: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold)),
                   onPressed: () {
-                    if (keyForm.currentState!.validate()) {
-                      login(context);
+                    if (controller.keyForm.currentState!.validate()) {
+                      controller.login(context);
                       print('valide ');
-                      print('username==================>$userNameController');
-                      print(
-                          'username text===============>${userNameController.text}');
                     }
                   },
                   child: const Text(

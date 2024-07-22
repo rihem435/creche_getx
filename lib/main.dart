@@ -1,7 +1,9 @@
+import 'package:app/core/bindings.dart';
 import 'package:app/screen/home_screen.dart';
 import 'package:app/screen/login_screen.dart';
 import 'package:app/screen/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 var text = const Text(
@@ -29,9 +31,11 @@ var afficheIconVi = IconButton(
 );
 Future<void> main() async {
   await GetStorage.init();
+  
   runApp(
-    const MaterialApp(
-      home: LoginScreen(),
+    GetMaterialApp(
+      initialBinding: AllBindings(),
+      home: const LoginScreen(),
     ),
   );
 }
