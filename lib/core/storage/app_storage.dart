@@ -11,8 +11,8 @@ class AppStorage {
   }
 
   static String? readId() {
-    String? name = SecureStorage.readSecureData(keyId);
-    return name;
+    String? id = SecureStorage.readSecureData(keyId);
+    return id;
   }
 
   static saveName(String name) {

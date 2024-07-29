@@ -8,7 +8,9 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+
     controller.getChildrenByParent();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
