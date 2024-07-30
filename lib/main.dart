@@ -1,6 +1,8 @@
 import 'package:app/core/bindings.dart';
+import 'package:app/screen/details_enfant_screen.dart';
 import 'package:app/screen/home_screen.dart';
 import 'package:app/screen/login_screen.dart';
+import 'package:app/screen/payment_screen.dart';
 import 'package:app/screen/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +37,7 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       initialBinding: AllBindings(),
-      home: const HomeScreen(),
+      home: const PaymentScreen(),
     ),
   );
 }

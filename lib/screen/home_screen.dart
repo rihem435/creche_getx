@@ -1,16 +1,16 @@
 import 'package:app/controllers/home_controller.dart';
 import 'package:app/core/storage/app_storage.dart';
+import 'package:app/screen/details_enfant_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
-
     controller.getChildrenByParent();
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -21,46 +21,56 @@ class HomeScreen extends GetView<HomeController> {
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              // <-- SEE HERE
-              decoration: const BoxDecoration(color: Colors.grey),
-
+              decoration: BoxDecoration(color: Colors.grey[800]),
               accountName: Text(
                 "${AppStorage.readName()}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-
               accountEmail: Text(
                 "${AppStorage.readEmail()}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.white70,
                 ),
               ),
-
-              currentAccountPicture: Image.asset(
-                "assets/images/parent.png",
+              currentAccountPicture: const CircleAvatar(
+                backgroundImage: AssetImage("assets/images/parent.png"),
               ),
             ),
             ListTile(
-              leading: const Icon(
-                Icons.home,
+              leading: const Icon(Icons.home, color: Colors.blue),
+              title: const Text(
+                'Home',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              title: const Text('Page 1'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: const Icon(
-                Icons.train,
+              leading: const Icon(Icons.settings, color: Colors.blue),
+              title: const Text(
+                'Settings',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              title: const Text('Page 2'),
               onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                'Logout',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                // Implement your logout functionality here
                 Navigator.pop(context);
               },
             ),
@@ -70,35 +80,90 @@ class HomeScreen extends GetView<HomeController> {
       body: Column(
         children: [
           Expanded(
-            child: SizedBox(
-              // color: Colors.grey,
-              height: double.infinity,
-              width: double.infinity,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.all(20),
-                    width: 300,
-                    child: const ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/enfant.jpg"),
-                        radius: 25,
-                      ),
-                      title: Text(
-                        "Mohamed Aziz",
-                      ),
-                      trailing: Text(
-                        "Present",
-                      ),
-                    ),
-                  );
+            child: Container(
+              color: Colors.grey,
+              child: FutureBuilder(
+                future: controller.getChildrenByParent(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.isNotEmpty) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.listChildrenModel!.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                color: Colors.grey,
+                                width: 300,
+                                child: ListTile(
+                                  leading: const CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage("assets/images/child.jpeg"),
+                                    radius: 25,
+                                  ),
+                                  title: Text(
+                                      "${controller.listChildrenModel![index].prenom!}${controller.listChildrenModel![index].nom!}"),
+                                  trailing: const Text("Present"),
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(
+                                  DetailsEnfantScreen(
+                                    nomEnfant: controller
+                                        .listChildrenModel![index].nom!,
+                                    prenomEnfant: controller
+                                        .listChildrenModel![index].prenom!,
+                                    ageEnfant: controller
+                                        .listChildrenModel![index].age!,
+                                    comportementEnfant: controller
+                                        .listChildrenModel![index]
+                                        .comportement!,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                "assets/images/no_data.jpg",
+                                width: 300,
+                                height: 200,
+                              ),
+                              const Text("No Children"),
+                            ],
+                          ),
+                        );
+                      }
+                    } else {
+                      return Center(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              "",
+                              width: 300,
+                              height: 200,
+                            ),
+                            const Text("No Children"),
+                          ],
+                        ),
+                      );
+                    }
+                  }
                 },
-                itemCount: 5,
-                scrollDirection: Axis.horizontal,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
