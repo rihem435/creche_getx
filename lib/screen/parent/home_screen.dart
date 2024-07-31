@@ -1,6 +1,7 @@
 import 'package:app/controllers/home_controller.dart';
+import 'package:app/core/networking/app_url.dart';
 import 'package:app/core/storage/app_storage.dart';
-import 'package:app/screen/details_enfant_screen.dart';
+import 'package:app/screen/parent/details_enfant_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -10,7 +11,7 @@ class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    controller.getChildrenByParent();
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -83,7 +84,7 @@ class HomeScreen extends GetView<HomeController> {
             child: Container(
               color: Colors.grey,
               child: FutureBuilder(
-                future: controller.getChildrenByParent(),
+                future: controller.getChildrenByParent("${AppUrl.getEnfantsByIdParentUrl}${AppStorage.readId()}"),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(

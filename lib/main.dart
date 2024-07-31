@@ -1,9 +1,10 @@
 import 'package:app/core/bindings.dart';
-import 'package:app/screen/details_enfant_screen.dart';
-import 'package:app/screen/home_screen.dart';
+import 'package:app/screen/parent/details_enfant_screen.dart';
+import 'package:app/screen/parent/home_screen.dart';
 import 'package:app/screen/login_screen.dart';
-import 'package:app/screen/payment_screen.dart';
+import 'package:app/screen/parent/payment_screen.dart';
 import 'package:app/screen/sign_up_screen.dart';
+import 'package:app/test_sli.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -37,7 +38,7 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       initialBinding: AllBindings(),
-      home: const PaymentScreen(),
+      home:  TestSli(),
     ),
   );
 }

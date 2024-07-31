@@ -1,7 +1,7 @@
 import 'package:app/core/networking/app_url.dart';
 import 'package:app/core/storage/app_storage.dart';
 import 'package:app/models/user_login_model.dart';
-import 'package:app/screen/home_screen.dart';
+import 'package:app/screen/parent/home_screen.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -40,6 +40,7 @@ class ProfileController extends GetxController {
             "${userLoginModel!.firstName}${userLoginModel!.lastName}");
 
         AppStorage.saveEmail("${userLoginModel!.email}");
+
 
         Get.to(const HomeScreen());
 
